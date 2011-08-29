@@ -1,0 +1,27 @@
+
+OUTPUT_DIR=bin
+OUTPUT_JAR=build/FeatureClustering_mapreduce.jar
+SRC = org/viirya/graph/*.java
+JAVA_DEP = /opt/hadoop/hadoop-0.20.2-core.jar:.
+
+all: ${SRC}
+	rm -rf ${OUTPUT_DIR}
+	mkdir ${OUTPUT_DIR}
+	javac -classpath ${JAVA_DEP} ${SRC} -d ${OUTPUT_DIR}
+	jar -cfv ${OUTPUT_JAR} -C ${OUTPUT_DIR} .
+
+clean:
+	hadoop dfs -rmr output/feature_clu_data
+
+run:
+	hadoop jar ${OUTPUT_JAR} org.viirya.graph.FeatureClusteringMapReduce data/flickr550/cluster/flickr550.textual/threshold_0.005 data/flickr550/features/flickr550.full_size_HA_1M_vw_by_flicrk11k compress
+
+#data/flickr550/clusters/flickr550.graph.full_size_HA_1M_vw_by_flicrk11k/threshold0.002/graph_threshold0.002/Output data/flickr550/features/flickr550.full_size_HA_1M_vw_by_flicrk11k compress
+
+#data/flickr550/features/flickr550.textual 0.005 compress
+
+#data/flickr550/features/Flickr550_psedoobj_normalized 0.01 compress
+
+#data/Flickr550_psedoobj_normalized 0.005 compress
+
+#data/flickr550.full_size_HA_1M_vw_by_flicrk11k 0.002 compress
